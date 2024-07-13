@@ -33,6 +33,7 @@ def user_all_texts(name:str):
     connection = sqlite3.Connection("texts.db")
     cursor = sqlite3.Cursor(connection)
     cursor.execute("select * from user where name = ?",(str(name),))
+    request.headers.add("Access-Control-Allow-Origin","*")
     return json.dumps(cursor.fetchall())
 
 @app.route('/all-texts/')
@@ -40,6 +41,7 @@ def all_texts():
     connection = sqlite3.Connection("texts.db")
     cursor = sqlite3.Cursor(connection)
     cursor.execute("select * from user")
+    request.headers.add("Access-Control-Allow-Origin","*")
     return json.dumps(cursor.fetchall())
 
 @app.route('/clear-all-text/<code>')

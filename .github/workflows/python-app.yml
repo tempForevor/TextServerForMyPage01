@@ -25,4 +25,4 @@ jobs:
         python -m pip install flask
     - name: Run project
       run: |
-        flask run
+        

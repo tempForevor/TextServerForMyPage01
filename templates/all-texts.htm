@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html lang="zh_cn">
+<head>
+    <meta charset="utf-8">
+    <title>Enter your text</title>
+</head>
+<body>
+    <ui>
+    {% for var in texts %}
+        <li>{{var[0]|safe}} :说: {{var[1]|safe}}</li>
+    {% endfor %}
+    </ui>
+</body>
+</html>

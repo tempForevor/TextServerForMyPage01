@@ -11,7 +11,6 @@ cursor.execute("create table user ( name varchar(51) not null, content varchar(1
 cursor.close()
 connection.close()
 
-
 @app.route('/', methods=['GET', 'POST'])
 def index():
     if request.method == 'POST':  # 判断是否是 POST 请求
@@ -33,7 +32,6 @@ def user_all_texts(name:str):
     connection = sqlite3.Connection("texts.db")
     cursor = sqlite3.Cursor(connection)
     cursor.execute("select * from user where name = ?",(str(name),))
-    request.headers.add("Access-Control-Allow-Origin","*")
     return json.dumps(cursor.fetchall())
 
 @app.route('/all-texts/')
@@ -41,8 +39,8 @@ def all_texts():
     connection = sqlite3.Connection("texts.db")
     cursor = sqlite3.Cursor(connection)
     cursor.execute("select * from user")
-    request.headers.add("Access-Control-Allow-Origin","*")
-    return json.dumps(cursor.fetchall())
+    # request.headers.add_header("Access-Control-Allow-Origin","*")
+    return render_template("all-texts.htm",texts=cursor.fetchall())
 
 @app.route('/clear-all-text/<code>')
 def clear(code:int):

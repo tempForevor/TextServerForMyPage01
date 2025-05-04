@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="zh_cn">
+
+<head>
+  <title>Goodtake</title>
+  <!-- Required meta tags -->
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <link rel="stylesheet" href="https://cdn.staticfile.net/twitter-bootstrap/5.1.1/css/bootstrap.min.css">
+  <script src="https://cdn.staticfile.net/twitter-bootstrap/5.1.1/js/bootstrap.bundle.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"
+    integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous">
+    </script>
+  <script src="{{ url_for('static', filename='global.js') }}"></script>
+</head>
+
+<body class="text-light bg-dark">
+  <header>
+    <!-- place navbar here -->
+    <nav id="nav-bar" class="nav justify-content-center fixed-top container-fliud d-flex">
+        <a class="nav-link text-primary" href="#top">Top</a>
+        <a class="nav-link text-primary" href="#about">About us</a>
+        <form method="post">
+        <input type="search" name="search" id="search" autocomplete="off" required>
+        <input type="submit" name="search_submit" value="Search">
+        </form>
+      </nav>
+  </header>
+      <div data-bs-spy="scroll" data-bs-target="#nav-bar" data-bs-smooth-scroll="true" tabindex="0">
+          <div id="top" style="height:10vh">Getting started...</div>
+          <div id="about" style="height:100vh">
+            <div class="card">
+              <div class="card-body  bg-dark">
+                <blockquote class="blockquote mb-0">
+                  <h1>Goodtake</h1>
+                  <footer class="blockquote-footer">A website which stores good words and sentences<cite title="Source title">[Now developing]</cite></footer>
+                  This is a website which stores good words and sentences for students to use in their articles in order to improve their grades in the exams.
+                  <br>
+                  You can store both English and Chinese good sentences here.
+                  <br>
+                  <b>We are finding an administer now.</b>
+                </blockquote>
+              </div>
+            </div>
+          </div> 
+        </div>
+      </div>
+    </header>  
+  <footer>
+    <!-- place footer here -->
+  </footer>
+</body>
+
+</html>

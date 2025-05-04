@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="zh_cn">
+
+<head>
+  <title>Goodtake - Post your sentence</title>
+  <!-- Required meta tags -->
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <link rel="stylesheet" href="https://cdn.staticfile.net/twitter-bootstrap/5.1.1/css/bootstrap.min.css">
+  <script src="https://cdn.staticfile.net/twitter-bootstrap/5.1.1/js/bootstrap.bundle.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"
+    integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous">
+    </script>
+  <script src="{{ url_for('static', filename='global.js') }}"></script>
+</head>
+
+<body class="text-light bg-dark">
+          <div style="height:100vh">
+            <div class="card">
+              <div class="card-body  bg-dark">
+                <blockquote class="blockquote mb-0">
+                  <h1 style="text-align:center;">Goodtake - Post your sentence</h1>
+                  <footer class="blockquote-footer">A website which stores good words and sentences<cite title="Source title">[Now developing]</cite></footer>
+                <div class="card border-primary bg-dark">
+                    <div class="card-title"><h2>Results(Sorry,now 'search' is [WIP])</h2></div>
+                    <div class="card-body">
+                    <p class="card-text" style="margin:auto; width:50%;">
+                        <ui>
+                            
+                            <div class="">
+                            {% for var in all_content %}
+                                    <div class="card">
+                                        <div class="card-body bg-dark">
+                                            <p class="card-text">{{var|safe}}</p>
+                                        </div>
+                                    </div><br>
+                                
+                                
+                            {% endfor %}
+                        </div>
+                        </ui>
+                    </p>
+                  </div>
+                </div>
+                </blockquote>
+              </div>
+            </div>
+          </div> 
+        </div>
+  <footer>
+    <!-- place footer here -->
+  </footer>
+</body>
+
+</html>

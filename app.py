@@ -1,56 +1,77 @@
 from flask import Flask,request, url_for, redirect, flash, render_template
+from flask_sqlalchemy import SQLAlchemy
 import json
 import sqlite3
 import logging
 app = Flask(__name__)
 
-connection = sqlite3.Connection("texts.db")
-cursor = sqlite3.Cursor(connection)
-cursor.execute('DROP TABLE IF EXISTS USER')
-cursor.execute("create table user ( name varchar(51) not null, content varchar(1025) not null )")
-cursor.close()
-connection.close()
+class GlobalLogger():
+    lgname = ""
+    def __init__(self,logger_name:str) -> None:
+        self.lgname = logger_name
+        self.info = logging.Logger(self.lgname,logging.INFO)
+        self.error = logging.Logger(self.lgname,logging.ERROR)
+        self.debug = logging.Logger(self.lgname,logging.DEBUG)
+        self.warning = logging.Logger(self.lgname,logging.WARNING)
 
-@app.route('/', methods=['GET', 'POST'])
-def index():
-    if request.method == 'POST':  # 判断是否是 POST 请求
-        # 获取表单数据
-        name = str(request.form.get('name')) # 传入表单对应输入字段的 name 值
-        content = str(request.form.get('content'))
-        connection = sqlite3.Connection("texts.db")
-        cursor = sqlite3.Cursor(connection)
-        cursor.execute('insert into user (name, content) values (?,?)',(name,content))
-        cursor.close()
-        connection.commit()
-        connection.close()
-        return redirect(url_for('index'))  # 重定向回主页
-    return render_template('index.htm')
+logger = GlobalLogger("Server")
 
-@app.route('/user-all-texts/<name>')
-def user_all_texts(name:str):
-    logging.info("Select texts for user "+str(name))
-    connection = sqlite3.Connection("texts.db")
-    cursor = sqlite3.Cursor(connection)
-    cursor.execute("select * from user where name = ?",(str(name),))
-    return json.dumps(cursor.fetchall())
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///goodtake_server_data.db'  # 使用 SQLite 数据库
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+db = SQLAlchemy(app)
 
-@app.route('/all-texts/')
-def all_texts():
-    connection = sqlite3.Connection("texts.db")
-    cursor = sqlite3.Cursor(connection)
-    cursor.execute("select * from user")
-    # request.headers.add_header("Access-Control-Allow-Origin","*")
-    return render_template("all-texts.htm",texts=cursor.fetchall())
+# class User(db.Model):
+#     id = db.Column(db.Integer, primary_key=True)
+#     username = db.Column(db.String(80), unique = True , nullable = False)
+#     password = db.Column(db.String(80), nullable = False)
+#     email = db.Column(db.String(120), unique = True, nullable = False)
 
-@app.route('/clear-all-text/<code>')
-def clear(code:int):
-    logging.info("Someone wants to clear the table with code "+str(code) )
-    if int(code) == 1457348:
-        connection = sqlite3.Connection("texts.db")
-        cursor = sqlite3.Cursor(connection)
-        cursor.execute('DROP TABLE IF EXISTS USER')
-        cursor.execute("create table user ( name varchar(51) not null, content varchar(1025) not null )")
-        cursor.close()
-        connection.close()
-        return "Successfully droped table!"
-    return "You have no right to drop table!"
+#     def __repr__(self):
+#         return f'<User {self.username}>'
+
+class Sentence(db.Model):
+    id = db.Column(db.Integer, primary_key = True)
+    content = db.Column(db.Text, nullable = False)
+
+    def __repr__(self) -> str:
+        return f'Sentence {self.id} : {self.content}'
+
+# All server functions
+
+with app.app_context():
+    db.create_all()
+
+@app.route('/',methods=["GET","POST"])
+def home_page():
+    if request.method == "POST":
+    #     search = '' + str(request.form.get("search")) + ''
+    #     print(f"Search for {search}.")
+    #     t = Sentence.query.filter(Sentence.content.endswith(search))
+    #     print(t)
+    #     contents = t.all()
+        contents = Sentence.query.all()
+        return render_template("home/search.htm", all_content=contents)
+    else:
+        return render_template("home/index.htm")
+
+@app.route('/post_sentence',methods=["GET","POST"])
+def post_sentence():
+    if request.method == "POST":
+        new_sentence = Sentence(content=request.form.get("sentence"))
+        db.session.add(new_sentence)
+        db.session.commit()
+        return "You have successfully posted a sentence!"
+    else:
+        return render_template("home/post_sentence.htm")
+
+@app.route('/droptable/<key>')
+def droptable(key):
+    if key=="clear111":
+        for i in Sentence.query.all():
+            db.session.delete(i)
+        db.session.commit()
+        return "Query free.jpg"
+    
+
+if __name__ == '__main__':
+    app.run(debug=True)

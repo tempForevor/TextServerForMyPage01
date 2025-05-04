@@ -44,12 +44,16 @@ with app.app_context():
 @app.route('/',methods=["GET","POST"])
 def home_page():
     if request.method == "POST":
-    #     search = '' + str(request.form.get("search")) + ''
+        search = '' + str(request.form.get("search")) + ''
     #     print(f"Search for {search}.")
     #     t = Sentence.query.filter(Sentence.content.endswith(search))
     #     print(t)
     #     contents = t.all()
         contents = Sentence.query.all()
+        if search != "#all":
+            for i in contents:
+                if not (search in str(i.content)):
+                    contents.remove(i)
         return render_template("home/search.htm", all_content=contents)
     else:
         return render_template("home/index.htm")

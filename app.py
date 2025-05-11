@@ -1,5 +1,6 @@
 from flask import Flask,request, url_for, redirect, flash, render_template
 from flask_sqlalchemy import SQLAlchemy
+from urllib import parse
 import json
 import sqlite3
 import logging
@@ -45,6 +46,7 @@ with app.app_context():
 def home_page():
     if request.method == "POST":
         search = '' + str(request.form.get("search")) + ''
+        search = parse.quote(search)
     #     print(f"Search for {search}.")
     #     t = Sentence.query.filter(Sentence.content.endswith(search))
     #     print(t)
@@ -62,7 +64,7 @@ def home_page():
 @app.route('/search/<text>')
 def searchfor(text):
     # search = '' + str(request.form.get("search")) + ''
-    search = text
+    search = parse.unquote(text)
     contents = Sentence.query.all()
     if search != "#all":
         for i in contents:
@@ -84,7 +86,7 @@ def post_sentence():
 def droptable(key,id):
     if key=="clear111":
         for i in Sentence.query.all():
-            if (id=="#all")or(id==i.id):
+            if (id=="all")or(str(id)==str(i.id)):
                 db.session.delete(i)
         db.session.commit()
         return "Query free.jpg"

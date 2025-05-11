@@ -15,7 +15,15 @@
 </head>
 
 <body class="text-light bg-dark">
-          <div style="height:100vh">
+  
+  <header>
+    <!-- place navbar here -->
+    <nav id="nav-bar" class="nav justify-content-center fixed-top container-fliud d-flex">
+        <a class="nav-link text-primary" href="#top">Top</a>
+        <a class="nav-link text-primary" href="{{ url_for('home_page') }}">Home</a>
+      </nav>
+  </header>
+          <div style="height:100vh" id="top">
             <div class="card">
               <div class="card-body  bg-dark">
                 <blockquote class="blockquote mb-0">

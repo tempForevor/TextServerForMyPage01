@@ -49,14 +49,26 @@ def home_page():
     #     t = Sentence.query.filter(Sentence.content.endswith(search))
     #     print(t)
     #     contents = t.all()
-        contents = Sentence.query.all()
-        if search != "#all":
-            for i in contents:
-                if not (search in str(i.content)):
-                    contents.remove(i)
-        return render_template("home/search.htm", all_content=contents)
+        # contents = Sentence.query.all()
+        # if search != "#all":
+        #     for i in contents:
+        #         if not (search in str(i.content)):
+        #             contents.remove(i)
+        return redirect(f"/search/{search}")
+        
     else:
         return render_template("home/index.htm")
+
+@app.route('/search/<text>')
+def searchfor(text):
+    # search = '' + str(request.form.get("search")) + ''
+    search = text
+    contents = Sentence.query.all()
+    if search != "#all":
+        for i in contents:
+            if not (search in str(i.content)):
+                contents.remove(i)
+    return render_template("home/search.htm", all_content=contents)
 
 @app.route('/post_sentence',methods=["GET","POST"])
 def post_sentence():
@@ -68,11 +80,12 @@ def post_sentence():
     else:
         return render_template("home/post_sentence.htm")
 
-@app.route('/droptable/<key>')
-def droptable(key):
+@app.route('/droptable/<key>/<id>')
+def droptable(key,id):
     if key=="clear111":
         for i in Sentence.query.all():
-            db.session.delete(i)
+            if (id=="#all")or(id==i.id):
+                db.session.delete(i)
         db.session.commit()
         return "Query free.jpg"
     

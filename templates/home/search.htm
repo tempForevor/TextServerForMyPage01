@@ -2,7 +2,7 @@
 <html lang="zh_cn">
 
 <head>
-  <title>Goodtake - Post your sentence</title>
+  <title>Goodtake - results</title>
   <!-- Required meta tags -->
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -15,6 +15,15 @@
 </head>
 
 <body class="text-light bg-dark">
+  
+  <header>
+    <!-- place navbar here -->
+    <nav id="nav-bar" class="nav justify-content-center fixed-top container-fliud d-flex">
+        <a class="nav-link text-primary" href="#top">Top</a>
+        <a class="nav-link text-primary" href="{{ url_for('home_page') }}">Home</a>
+        <a class="nav-link text-primary" href="{{ url_for('post_sentence') }}">Post sentences</a>
+      </nav>
+  </header>
           <div style="height:100vh">
             <div class="card">
               <div class="card-body  bg-dark">

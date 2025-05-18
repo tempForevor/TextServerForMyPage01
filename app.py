@@ -4,6 +4,7 @@ from urllib import parse
 import json
 import sqlite3
 import logging
+import random
 app = Flask(__name__)
 
 class GlobalLogger():
@@ -33,9 +34,10 @@ db = SQLAlchemy(app)
 class Sentence(db.Model):
     id = db.Column(db.Integer, primary_key = True)
     content = db.Column(db.Text, nullable = False)
+    tags = db.Column(db.Text)
 
     def __repr__(self) -> str:
-        return f'Sentence {self.id} : {self.content}'
+        return f'Sentence {self.id}<br><h6 class="badge rounded-pill bg-primary">Tags : {self.tags}</h6><br>{self.content}'
 
 # All server functions
 
@@ -45,8 +47,10 @@ with app.app_context():
 @app.route('/',methods=["GET","POST"])
 def home_page():
     if request.method == "POST":
-        search = '' + str(request.form.get("search")) + ''
-        search = parse.quote(search)
+        randomres=request.form.get("random","false")
+        if randomres=="false":
+            search = '' + str(request.form.get("search")) + ''
+            search = parse.quote(search)
     #     print(f"Search for {search}.")
     #     t = Sentence.query.filter(Sentence.content.endswith(search))
     #     print(t)
@@ -56,7 +60,10 @@ def home_page():
         #     for i in contents:
         #         if not (search in str(i.content)):
         #             contents.remove(i)
-        return redirect(f"/search/{search}")
+            return redirect(f"/search/{search}")
+        contents = Sentence.query.all()
+        r = random.choice(contents)
+        return redirect(f"/sentence/{r.id}")
         
     else:
         return render_template("home/index.htm")
@@ -67,15 +74,27 @@ def searchfor(text):
     search = parse.unquote(text)
     contents = Sentence.query.all()
     if search != "#all":
+        flag = False
+        if search[0] == "#":
+            flag = True
+            search = search[1:]
         for i in contents:
-            if not (search in str(i.content)):
+            if flag:
+                if not (search in str(i.tags)):
+                    contents.remove(i)
+            elif not (search in str(i.content)):
                 contents.remove(i)
     return render_template("home/search.htm", all_content=contents)
+
+@app.route('/sentence/<int:id>')
+def getsentence(id):
+    res = Sentence.query.filter(Sentence.id==id)[0]
+    return render_template("home/getsentence.htm", id=res.id , sentence = res.content, tags=res.tags)
 
 @app.route('/post_sentence',methods=["GET","POST"])
 def post_sentence():
     if request.method == "POST":
-        new_sentence = Sentence(content=request.form.get("sentence"))
+        new_sentence = Sentence(content=request.form.get("sentence"),tags=request.form.get("tags"))
         db.session.add(new_sentence)
         db.session.commit()
         return "You have successfully posted a sentence!"

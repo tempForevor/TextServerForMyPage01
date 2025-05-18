@@ -17,13 +17,13 @@
 <body class="text-light bg-dark">
   <header>
     <!-- place navbar here -->
-    <nav id="nav-bar" class="nav justify-content-center fixed-top container-fliud d-flex">
+    <nav id="nav-bar" class="nav justify-content-center fixed-top container-fliud d-flex" style="width: 100%;">
         <a class="nav-link text-primary" href="#top">Top</a>
         <a class="nav-link text-primary" href="#about">About us</a>
         <a class="nav-link text-primary" href="{{ url_for('post_sentence') }}">Post sentences</a>
         <form method="post">
-        <input type="search" name="search" id="search" autocomplete="off"required>
-        <input type="submit" name="search_submit" value="Search">(Type '#all' to get all sentences)
+        <input type="search" name="search" id="search" autocomplete="off" required class="form-control" style="width:30% ;display:inline;">
+        <input type="submit" name="search_submit" value="Search" class="btn btn-primary" style="display:inline;">(Type '#all' to get all sentences)(Type '#k' to search for tag 'k')
         </form>
       </nav>
   </header>
@@ -41,6 +41,9 @@
                   <br>
                   <b>We are finding an administer now.</b>
                 </blockquote>
+                <form name="random" method="post">
+                  <button type="submit" name="random" value="true" class="btn btn-primary">Random Sentence</button>
+                </form>
               </div>
             </div>
           </div> 
